@@ -1,0 +1,17 @@
+{
+  "name": "ZTrust",
+  "version": "1.0",
+  "description": "ZTrust POC",
+  "permissions": [
+  	"webRequest",
+  	"webRequestBlocking",
+  	"http://localhost:8888/*",
+  	"http://localhost:8080/*",
+  	"*://*.skiptomyliu.com/*"
+  ],
+  "background": {
+      "scripts": ["background.js"],
+      "persistent": true
+  },
+  "manifest_version": 2
+}
