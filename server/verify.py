@@ -1,8 +1,9 @@
 import boto3
 import base64
+import datetime
+import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-import settings
 kms = boto3.client("kms")
 
 
@@ -12,23 +13,31 @@ def decrypt_token(encrypted_blob, username):
         CiphertextBlob=encrypted_blob,
         EncryptionContext={"username": username},
     )
-    return result["Plaintext"]
+    return json.loads(result["Plaintext"])
 
 
 def verify(token, username):
     blob = base64.b64decode(token)
     result = decrypt_token(encrypted_blob=blob, username=username)
-    return result
+
+    time_format = "%Y%m%dT%H%M%SZ"
+    now = datetime.datetime.utcnow()
+    not_before = datetime.datetime.strptime(result.get("not_before"), time_format)
+    not_after = datetime.datetime.strptime(result.get("not_after"), time_format)
+
+    return now < not_before or now > not_after
 
 
 class VerifyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         print(self.headers)
-
         try:
             token = self.headers["x-ztrust-token"]
             username = self.headers["x-ztrust-username"]
             result = verify(token=token, username=username)
+            if not result:
+                raise Exception("Expired token")
+
             resp_code = 200
             resp_txt = b"ok"
             print(result)
