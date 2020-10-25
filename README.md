@@ -12,5 +12,3 @@
 ## Envoy
 
 ## Authnz Server
-
-

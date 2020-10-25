@@ -5,9 +5,9 @@
   "permissions": [
   	"webRequest",
   	"webRequestBlocking",
-	"http://localhost:8888/*",  // agent
-	// "http://localhost:8080/*",  // auth server
-  	"http://localhost:10000/*", // envoy
+	"http://localhost:8888/*",  	// agent
+	// "http://localhost:8080/*",  	// auth server
+  	"http://localhost:10000/*", 	// envoy
   	"*://*.skiptomyliu.com/*"
   ],
   "background": {
