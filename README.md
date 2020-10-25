@@ -1,8 +1,8 @@
-# zerotrust poc
+# zerotrust authn poc
 
 ![diagram](./images/diagram.png)
 
-Note: This is missing trust policies + trust engine
+Note: This just contains the authn piece.  One of the largest missing pieces of 0-trust model is the usage of trust policies + trust engine.  This POC focuses on authn only.
 
 ## Chrome Extension
 The extension makes calls to the localhost agent and wraps HTTP calls to our selected domains.
