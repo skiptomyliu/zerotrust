@@ -3,8 +3,8 @@ package policy
 
 default allow = false
 
-allow = true { 
-    count(violation) == 0  
+allow = true {
+    count(violation) == 0
 }
 
 violation [user] {

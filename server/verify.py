@@ -29,18 +29,19 @@ def verify(token, username):
 
     return now < not_before or now > not_after
 
+
 def authz(username):
     # request against OPA agent
-    with open('./opa/data.json') as f:
+    with open("./opa/data.json") as f:
         data = {}
-        data['input'] = json.load(f)
+        data["input"] = json.load(f)
 
     r = requests.post(
-            'http://localhost:8181/v1/data/policy/allow',
-            json=data,
-            headers={'Content-type': 'application/json'}
-        )
-    return r.json()['result']
+        "http://localhost:8181/v1/data/policy/allow",
+        json=data,
+        headers={"Content-type": "application/json"},
+    )
+    return r.json()["result"]
 
 
 class VerifyServer(BaseHTTPRequestHandler):
