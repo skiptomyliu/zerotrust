@@ -41,7 +41,6 @@ static_resources:
                     allowed_headers:
                       patterns:
                         prefix: 'x-ztrust-'
-
             - name: envoy.router
   clusters:
   - name: banana
@@ -51,7 +50,6 @@ static_resources:
     - socket_address:
         address: 127.0.0.1
         port_value: 9999
-
   - name: ext-authz
     connect_timeout: 1s
     type: STRICT_DNS
