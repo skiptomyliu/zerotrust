@@ -2,6 +2,8 @@ import boto3
 import base64
 import datetime
 import json
+import requests
+
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 kms = boto3.client("kms")
@@ -28,6 +30,20 @@ def verify(token, username):
     return now < not_before or now > not_after
 
 
+def authz(username):
+    # request against OPA agent
+    with open("./opa/data.json") as f:
+        data = {}
+        data["input"] = json.load(f)
+
+    r = requests.post(
+        "http://localhost:8181/v1/data/policy/allow",
+        json=data,
+        headers={"Content-type": "application/json"},
+    )
+    return r.json()["result"]
+
+
 class VerifyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         print(self.headers)
@@ -38,13 +54,16 @@ class VerifyServer(BaseHTTPRequestHandler):
             if not result:
                 raise Exception("Expired token")
 
+            result = authz(username=username)
+            if not result:
+                raise Exception("Minimum Requirements not met.")
+
             resp_code = 200
             resp_txt = b"ok"
-            print(result)
         except Exception as e:
             print(e)
             resp_code = 403
-            resp_txt = b"prohibited"
+            resp_txt = str.encode(str(e))
 
         self.send_response(resp_code)
         self.send_header("Content-type", "text/html")

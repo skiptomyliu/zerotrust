@@ -51,9 +51,9 @@ def run():
     httpd.serve_forever()
 
 
-result = create_token(username="hurricaneliu")
-encoded = base64.b64encode(result)
-print(encoded)
+# result = create_token(username="hurricaneliu")
+# encoded = base64.b64encode(result)
+# print(encoded)
 # plaintext = decrypt_token(base64.b64decode(encoded))
 # print(plaintext)
 run()
